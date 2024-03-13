@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
 import com.jovita.startwarplanets.R
-import com.jovita.startwarplanets.data.Planet
+import com.jovita.startwarplanets.data.RootPlanetItem
 import com.jovita.startwarplanets.planetDetail.PlanetDetailActivity
 import com.jovita.startwarplanets.ui.theme.StartwarPlanetsTheme
 import kotlinx.coroutines.Dispatchers
@@ -49,7 +49,7 @@ import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
-    var planets by mutableStateOf<List<Planet>>(emptyList())
+    var planets by mutableStateOf<List<RootPlanetItem>>(emptyList())
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,9 +85,9 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun fetchPlanets(): List<Planet> {
+    private fun fetchPlanets(): List<RootPlanetItem> {
         lifecycleScope.launch(Dispatchers.Main) {
-            val planetsList = PlanetViewModel().getPlanetDetails()
+            val planetsList = PlanetListViewModel().getPlanetsData()
             planets = planetsList!!
         }
         return planets
@@ -101,7 +101,7 @@ class MainActivity : ComponentActivity() {
         StartwarPlanetsTheme {
 
             var context = LocalContext.current
-            val planetList: List<Planet>? = fetchPlanets()
+            val planetList: List<RootPlanetItem>? = fetchPlanets()
 
 
             Column(Modifier
@@ -129,7 +129,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun planetItem(data: Planet?, onClick: () -> Unit) {
+fun planetItem(data: RootPlanetItem?, onClick: () -> Unit) {
 
     ElevatedCard(
         modifier = Modifier

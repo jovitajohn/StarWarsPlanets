@@ -1,8 +1,18 @@
 package com.jovita.startwarplanets.data
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import java.io.Serializable
 
-data class PlanetData (   val count: Long,
-                          val next: String,
-                          val previous: Any?,
-                          val results: List<Planet>,)
+data class PlanetData(
+    val message: String,
+    val total_records: Int,
+    val total_pages: Int,
+    val next: String,
+    val previous: String,
+    val results: List<RootPlanetItem>,
+)
+
+data class RootPlanetItem(
+    val uid: String,
+    val name: String,
+    val url: String
+) : Serializable

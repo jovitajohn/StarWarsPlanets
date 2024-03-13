@@ -1,24 +1,35 @@
 package com.jovita.startwarplanets.data
 
-import android.os.Parcelable
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-data class Planet( val name: String,
-                   @JsonProperty("rotation_period")
-                   val rotationPeriod: String,
-                   @JsonProperty("orbital_period")
-                   val orbitalPeriod: String,
-                   val diameter: String,
-                   val climate: String,
-                   val gravity: String,
-                   val terrain: String,
-                   @JsonProperty("surface_water")
-                   val surfaceWater: String,
-                   val population: String,
-                   val residents: List<String>,
-                   val films: List<String>,
-                   val created: String,
-                   val edited: String,
-                   val url: String,) : Serializable
+data class Planet(
+    val message : String = " ",
+    val result : PlanetResult? = null
+)
+
+data class PlanetResult(
+    val properties : PlanetProperties,
+    val description : String,
+    @SerializedName("_id")
+    val id : String,
+    val uid : String,
+    @SerializedName("__v")
+    val version : Int
+)
+
+data class PlanetProperties(
+    val diameter: String,
+    val rotation_period: String,
+    val orbital_period: String,
+    val gravity: String,
+    val population: String,
+    val climate: String,
+    val terrain: String,
+    val surface_water: String,
+    val created: String,
+    val edited: String,
+    val name: String,
+    val url: String
+)
 
