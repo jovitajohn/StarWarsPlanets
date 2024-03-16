@@ -54,7 +54,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Scaffold (
+            BaseContent()
+           /* Scaffold (
                 topBar = {
                     TopAppBar(
                         colors = TopAppBarDefaults.smallTopAppBarColors(
@@ -81,7 +82,7 @@ class MainActivity : ComponentActivity() {
                             .fillMaxSize()
                     )
                 }
-            }
+            }*/
         }
     }
 
@@ -94,6 +95,39 @@ class MainActivity : ComponentActivity() {
     }
 
 
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun BaseContent(){
+        Scaffold (
+            topBar = {
+                TopAppBar(
+                    colors = TopAppBarDefaults.smallTopAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        titleContentColor = MaterialTheme.colorScheme.primary,
+                    ),
+                    title = {
+                        Text("Star Wars Planets")
+                    }
+                )
+            },
+        ) { innerPadding ->
+            Column(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .paint(
+                        painterResource(id = R.drawable.background_galaxy),
+                        contentScale = ContentScale.FillBounds
+                    ),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                StartWars(
+                    Modifier
+                        .fillMaxSize()
+                )
+            }
+        }
+    }
+
     @Preview(showBackground = true, name = "Star Wars")
     @Composable
     fun StartWars(modifier: Modifier = Modifier) {
@@ -104,9 +138,10 @@ class MainActivity : ComponentActivity() {
             val planetList: List<RootPlanetItem>? = fetchPlanets()
 
 
-            Column(Modifier
-                .absolutePadding(5.dp,15.dp,5.dp,5.dp)
-                .fillMaxHeight()
+            Column(
+                Modifier
+                    .absolutePadding(5.dp, 15.dp, 5.dp, 5.dp)
+                    .fillMaxHeight()
                 ) {
                 if (!planetList.isNullOrEmpty()) {
                     for (item in planetList) {
