@@ -55,7 +55,23 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             BaseContent()
-           /* Scaffold (
+        }
+    }
+
+    private fun fetchPlanets(): List<RootPlanetItem> {
+        lifecycleScope.launch(Dispatchers.Main) {
+            val planetsList = PlanetListViewModel().getPlanetsData()
+            planets = planetsList!!
+        }
+        return planets
+    }
+
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun BaseContent(){
+        StartwarPlanetsTheme {
+            Scaffold(
                 topBar = {
                     TopAppBar(
                         colors = TopAppBarDefaults.smallTopAppBarColors(
@@ -82,48 +98,6 @@ class MainActivity : ComponentActivity() {
                             .fillMaxSize()
                     )
                 }
-            }*/
-        }
-    }
-
-    private fun fetchPlanets(): List<RootPlanetItem> {
-        lifecycleScope.launch(Dispatchers.Main) {
-            val planetsList = PlanetListViewModel().getPlanetsData()
-            planets = planetsList!!
-        }
-        return planets
-    }
-
-
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    fun BaseContent(){
-        Scaffold (
-            topBar = {
-                TopAppBar(
-                    colors = TopAppBarDefaults.smallTopAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        titleContentColor = MaterialTheme.colorScheme.primary,
-                    ),
-                    title = {
-                        Text("Star Wars Planets")
-                    }
-                )
-            },
-        ) { innerPadding ->
-            Column(
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .paint(
-                        painterResource(id = R.drawable.background_galaxy),
-                        contentScale = ContentScale.FillBounds
-                    ),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-            ) {
-                StartWars(
-                    Modifier
-                        .fillMaxSize()
-                )
             }
         }
     }

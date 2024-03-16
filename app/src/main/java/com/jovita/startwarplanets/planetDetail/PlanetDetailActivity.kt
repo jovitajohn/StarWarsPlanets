@@ -38,6 +38,7 @@ import com.jovita.startwarplanets.data.Planet
 import com.jovita.startwarplanets.data.PlanetProperties
 import com.jovita.startwarplanets.data.RootPlanetItem
 import com.jovita.startwarplanets.planetListing.PlanetListViewModel
+import com.jovita.startwarplanets.ui.theme.StartwarPlanetsTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -71,43 +72,45 @@ class PlanetDetailActivity : ComponentActivity() {
     @Composable
     fun UiComponents() {
 
-        val scope = rememberCoroutineScope()
-        val snackbarHostState = remember { SnackbarHostState() }
-        Scaffold(
-            snackbarHost = {
-                SnackbarHost(hostState = snackbarHostState)
-            },
-            topBar = {
-                TopAppBar(
-                    colors = TopAppBarDefaults.smallTopAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        titleContentColor = MaterialTheme.colorScheme.primary,
-                    ),
-                    title = {
-                        Text("Planet - ${planetShort.name}")
+        StartwarPlanetsTheme {
+            val scope = rememberCoroutineScope()
+            val snackbarHostState = remember { SnackbarHostState() }
+            Scaffold(
+                snackbarHost = {
+                    SnackbarHost(hostState = snackbarHostState)
+                },
+                topBar = {
+                    TopAppBar(
+                        colors = TopAppBarDefaults.smallTopAppBarColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            titleContentColor = MaterialTheme.colorScheme.primary,
+                        ),
+                        title = {
+                            Text("Planet - ${planetShort.name}")
+                        }
+                    )
+                },
+            ) { innerPadding ->
+                Column(
+                    modifier = Modifier
+                        .padding(innerPadding),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                ) {
+                    LaunchedEffect(Unit) {
+                        snackbarHostState.showSnackbar("Loading contents...")
                     }
-                )
-            },
-        ) { innerPadding ->
-            Column(
-                modifier = Modifier
-                    .padding(innerPadding),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-            ) {
-                LaunchedEffect(Unit) {
-                    snackbarHostState.showSnackbar("Loading contents...")
+
+
+                    var planetResponse: Planet = fetchPlanetDetails()
+
+                    if (planetResponse != null) {
+                        planetResponse.result?.properties?.let { PlanetDetailGrid(it) }
+                    }
+
+                    //Text(text = "Loading...")
                 }
 
-
-                var planetResponse: Planet = fetchPlanetDetails()
-
-                if (planetResponse != null) {
-                    planetResponse.result?.properties?.let { PlanetDetailGrid(it) }
-                }
-
-                //Text(text = "Loading...")
             }
-
         }
     }
 
@@ -116,57 +119,73 @@ class PlanetDetailActivity : ComponentActivity() {
 
         Column {
             Row {
-                Row (modifier = Modifier
-                    . weight(1f)
-                    .padding(10.dp)){
+                Row(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(10.dp)
+                ) {
                     PropertyItem(value = plantProperties.rotation_period, name = "Rotation Period")
                 }
-               Row(modifier = Modifier
-                   . weight(1f)
-                   .padding(10.dp)) {
-                   PropertyItem(value = plantProperties.orbital_period, name = "Orbital Period")
-               }
+                Row(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(10.dp)
+                ) {
+                    PropertyItem(value = plantProperties.orbital_period, name = "Orbital Period")
+                }
             }
         }
         Column {
 
             Row {
-                Row (modifier = Modifier
-                    . weight(1f)
-                    .padding(10.dp)) {
+                Row(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(10.dp)
+                ) {
                     PropertyItem(value = plantProperties.diameter, name = "Diameter")
                 }
-                Row (modifier = Modifier
-                    . weight(1f)
-                    .padding(10.dp)) {
+                Row(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(10.dp)
+                ) {
                     PropertyItem(value = plantProperties.climate, name = "Climate")
                 }
             }
         }
         Column {
             Row {
-                Row (modifier = Modifier
-                    . weight(1f)
-                    .padding(10.dp)) {
+                Row(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(10.dp)
+                ) {
                     PropertyItem(value = plantProperties.gravity, name = "Gravity")
                 }
-                Row (modifier = Modifier
-                    . weight(1f)
-                    .padding(10.dp)) {
+                Row(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(10.dp)
+                ) {
                     PropertyItem(value = plantProperties.terrain, name = "Terrain")
                 }
             }
         }
         Column {
             Row {
-                Row (modifier = Modifier
-                    . weight(1f)
-                    .padding(10.dp)) {
+                Row(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(10.dp)
+                ) {
                     PropertyItem(value = plantProperties.surface_water, name = "Surface water")
                 }
-                Row (modifier = Modifier
-                    . weight(1f)
-                    .padding(10.dp)) {
+                Row(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(10.dp)
+                ) {
                     PropertyItem(value = plantProperties.population, name = "population")
                 }
             }
