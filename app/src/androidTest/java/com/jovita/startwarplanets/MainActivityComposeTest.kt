@@ -1,25 +1,44 @@
 package com.jovita.startwarplanets
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import com.jovita.startwarplanets.planetListing.MainActivity
-import com.jovita.startwarplanets.ui.theme.StartwarPlanetsTheme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
+import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
 class MainActivityComposeTest {
 
     @get:Rule
-    val composeTestRule = createComposeRule()
+    val composeTestRule = createAndroidComposeRule<MainActivity>()
+
+    @Before
+    fun setup() {
+        Dispatchers.setMain(Dispatchers.Unconfined)
+    }
+
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain()
+    }
+    @Test
+    fun viewsPresent(){
+        composeTestRule.onNodeWithText("Star Wars Planets").assertExists()
+        composeTestRule.onNodeWithText("Loading...").assertExists()
+    }
 
     @Test
-    fun actionbarTitlePresent(){
-        composeTestRule.setContent {
-            StartwarPlanetsTheme {
-                MainActivity()
-            }
-        }
-        composeTestRule.onNodeWithText("Star Wars Planets").assertIsDisplayed()
+    fun itemClickCheck(){
+        composeTestRule.onNodeWithTag(composeTestRule.activity.getString(R.string.planetitem)).performClick()
+        composeTestRule.onNodeWithTag(composeTestRule.activity.getString(R.string.snackbar)).assertIsDisplayed()
     }
 }

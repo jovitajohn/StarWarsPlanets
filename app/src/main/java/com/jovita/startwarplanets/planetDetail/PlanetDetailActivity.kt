@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
 import com.jovita.startwarplanets.data.Planet
 import com.jovita.startwarplanets.data.PlanetProperties
+import com.jovita.startwarplanets.data.PlanetResult
 import com.jovita.startwarplanets.data.RootPlanetItem
 import com.jovita.startwarplanets.planetListing.PlanetListViewModel
 import com.jovita.startwarplanets.ui.theme.StartwarPlanetsTheme
@@ -104,7 +105,7 @@ class PlanetDetailActivity : ComponentActivity() {
                     var planetResponse: Planet = fetchPlanetDetails()
 
                     if (planetResponse != null) {
-                        planetResponse.result?.properties?.let { PlanetDetailGrid(it) }
+                        planetResponse.result?.let { PlanetDetailGrid(it) }
                     }
 
                     //Text(text = "Loading...")
@@ -115,78 +116,110 @@ class PlanetDetailActivity : ComponentActivity() {
     }
 
     @Composable
-    fun PlanetDetailGrid(plantProperties: PlanetProperties) {
+    fun PlanetDetailGrid(plantResult: PlanetResult) {
 
-        Column {
-            Row {
-                Row(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(10.dp)
-                ) {
-                    PropertyItem(value = plantProperties.rotation_period, name = "Rotation Period")
-                }
-                Row(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(10.dp)
-                ) {
-                    PropertyItem(value = plantProperties.orbital_period, name = "Orbital Period")
-                }
-            }
-        }
-        Column {
+        val plantProperties: PlanetProperties = plantResult.properties
 
-            Row {
-                Row(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(10.dp)
-                ) {
-                    PropertyItem(value = plantProperties.diameter, name = "Diameter")
-                }
-                Row(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(10.dp)
-                ) {
-                    PropertyItem(value = plantProperties.climate, name = "Climate")
+        Column(
+            Modifier
+                .padding(20.dp)
+        ) {
+            ElevatedCard(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp),
+                shape = RoundedCornerShape(5.dp),
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = 10.dp
+                )
+            ) {
+                Text(text = "Description :",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp)
+                Text(text = plantResult.description,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 22.sp,
+                    color = Color.Black)
+            }
+
+            Column {
+
+                Row {
+                    Row(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(10.dp)
+                    ) {
+                        PropertyItem(
+                            value = plantProperties.rotation_period,
+                            name = "Rotation Period"
+                        )
+                    }
+                    Row(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(10.dp)
+                    ) {
+                        PropertyItem(
+                            value = plantProperties.orbital_period,
+                            name = "Orbital Period"
+                        )
+                    }
                 }
             }
-        }
-        Column {
-            Row {
-                Row(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(10.dp)
-                ) {
-                    PropertyItem(value = plantProperties.gravity, name = "Gravity")
-                }
-                Row(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(10.dp)
-                ) {
-                    PropertyItem(value = plantProperties.terrain, name = "Terrain")
+            Column {
+
+                Row {
+                    Row(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(10.dp)
+                    ) {
+                        PropertyItem(value = plantProperties.diameter, name = "Diameter")
+                    }
+                    Row(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(10.dp)
+                    ) {
+                        PropertyItem(value = plantProperties.climate, name = "Climate")
+                    }
                 }
             }
-        }
-        Column {
-            Row {
-                Row(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(10.dp)
-                ) {
-                    PropertyItem(value = plantProperties.surface_water, name = "Surface water")
+            Column {
+                Row {
+                    Row(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(10.dp)
+                    ) {
+                        PropertyItem(value = plantProperties.gravity, name = "Gravity")
+                    }
+                    Row(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(10.dp)
+                    ) {
+                        PropertyItem(value = plantProperties.terrain, name = "Terrain")
+                    }
                 }
-                Row(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(10.dp)
-                ) {
-                    PropertyItem(value = plantProperties.population, name = "population")
+            }
+            Column {
+                Row {
+                    Row(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(10.dp)
+                    ) {
+                        PropertyItem(value = plantProperties.surface_water, name = "Surface water")
+                    }
+                    Row(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(10.dp)
+                    ) {
+                        PropertyItem(value = plantProperties.population, name = "population")
+                    }
                 }
             }
         }
@@ -195,31 +228,27 @@ class PlanetDetailActivity : ComponentActivity() {
     @Composable
     fun PropertyItem(value: String, name: String) {
 
-        Row {
-            ElevatedCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                shape = RoundedCornerShape(5.dp),
-                elevation = CardDefaults.cardElevation(
-                    defaultElevation = 10.dp
+        ElevatedCard(
+            modifier = Modifier
+                .fillMaxWidth(),
+            shape = RoundedCornerShape(5.dp),
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 10.dp
+            )
+        ) {
+            Column() {
+                Text(
+                    text = value,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 22.sp,
+                    color = Color.Black
                 )
-            ) {
-                Column() {
-                    Text(
-                        text = value,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 22.sp,
-                        color = Color.Black
-                    )
 
-                    Text(
-                        text = name,
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 18.sp,
-                        color = Color.Black
-                    )
-                }
+                Text(
+                    text = name,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 18.sp
+                )
             }
         }
     }

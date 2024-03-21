@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Startwar Planets</string>
+    <string name="planetitem">planetItem</string>
+    <string name="try_again_later">Try again later!</string>
+    <string name="snackbar">Snackbar</string>
+    <string name="launching_details_for">Launching details for %1$s</string>
 </resources>
