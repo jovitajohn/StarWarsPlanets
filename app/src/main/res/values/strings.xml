@@ -4,4 +4,21 @@
     <string name="try_again_later">Try again later!</string>
     <string name="snackbar">Snackbar</string>
     <string name="launching_details_for">Launching details for %1$s</string>
+    <string name="top_bar">top bar</string>
+    <string name="top_bar_planet">Planet - %1$s</string>
+    <string name="get_extra_planet">planet</string>
+    <string name="test_planet">test planet</string>
+    <string name="test_planet_url">test url</string>
+    <string name="test_planet_uid">111</string>
+    <string name="loading_contents">Loading contents...</string>
+    <string name="description">Description :</string>
+    <string name="rotation_period">Rotation Period</string>
+    <string name="orbital_period">Orbital Period</string>
+    <string name="diameter">Diameter</string>
+    <string name="climate">Climate</string>
+    <string name="gravity">Gravity</string>
+    <string name="terrain">Terrain</string>
+    <string name="surface_water">Surface water</string>
+    <string name="population">population</string>
+    <string name="star_wars_planets">Star Wars Planets</string>
 </resources>

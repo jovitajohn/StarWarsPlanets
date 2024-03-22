@@ -96,7 +96,7 @@ class MainActivity : ComponentActivity() {
                             titleContentColor = MaterialTheme.colorScheme.primary,
                         ),
                         title = {
-                            Text("Star Wars Planets", Modifier.testTag("Starwars"))
+                            Text(stringResource(R.string.star_wars_planets))
                         }
                     )
                 },
@@ -146,7 +146,7 @@ class MainActivity : ComponentActivity() {
                                     ))
                             }
                             val intent = Intent(context, PlanetDetailActivity::class.java)
-                            intent.putExtra("planet", item)
+                            intent.putExtra(getString(R.string.get_extra_planet), item)
                             context.startActivity(intent)
                         }
                     }
@@ -187,7 +187,7 @@ class MainActivity : ComponentActivity() {
 
                 if (data == null) {
                     Text(
-                        text = "Loading...",
+                        text = getString(R.string.loading_contents),
                         fontWeight = FontWeight.Bold,
                         fontSize = 22.sp,
                         color = Color.Black

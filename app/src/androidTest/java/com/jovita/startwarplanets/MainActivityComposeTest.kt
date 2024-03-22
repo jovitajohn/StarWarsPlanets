@@ -32,8 +32,8 @@ class MainActivityComposeTest {
     }
     @Test
     fun viewsPresent(){
-        composeTestRule.onNodeWithText("Star Wars Planets").assertExists()
-        composeTestRule.onNodeWithText("Loading...").assertExists()
+        composeTestRule.onNodeWithText(composeTestRule.activity.getString(R.string.star_wars_planets)).assertExists()
+        composeTestRule.onNodeWithText(composeTestRule.activity.getString(R.string.loading_contents)).assertExists()
     }
 
     @Test

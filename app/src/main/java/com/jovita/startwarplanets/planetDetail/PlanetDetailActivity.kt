@@ -29,11 +29,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
+import com.jovita.startwarplanets.R
 import com.jovita.startwarplanets.data.Planet
 import com.jovita.startwarplanets.data.PlanetProperties
 import com.jovita.startwarplanets.data.PlanetResult
@@ -51,7 +54,8 @@ class PlanetDetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        planetShort = intent.getSerializableExtra("planet") as RootPlanetItem
+        planetShort =
+            intent.getSerializableExtra(getString(R.string.get_extra_planet)) as RootPlanetItem
 
         setContent {
             UiComponents()
@@ -78,7 +82,11 @@ class PlanetDetailActivity : ComponentActivity() {
             val snackbarHostState = remember { SnackbarHostState() }
             Scaffold(
                 snackbarHost = {
-                    SnackbarHost(hostState = snackbarHostState)
+                    SnackbarHost(
+                        hostState = snackbarHostState, Modifier.testTag(
+                            stringResource(R.string.snackbar)
+                        )
+                    )
                 },
                 topBar = {
                     TopAppBar(
@@ -86,9 +94,10 @@ class PlanetDetailActivity : ComponentActivity() {
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
                             titleContentColor = MaterialTheme.colorScheme.primary,
                         ),
+                        modifier = Modifier.testTag(stringResource(R.string.top_bar)),
                         title = {
-                            Text("Planet - ${planetShort.name}")
-                        }
+                            Text(stringResource(R.string.top_bar_planet, planetShort.name))
+                        },
                     )
                 },
             ) { innerPadding ->
@@ -98,7 +107,7 @@ class PlanetDetailActivity : ComponentActivity() {
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
                     LaunchedEffect(Unit) {
-                        snackbarHostState.showSnackbar("Loading contents...")
+                        snackbarHostState.showSnackbar(getString(R.string.loading_contents))
                     }
 
 
@@ -107,8 +116,6 @@ class PlanetDetailActivity : ComponentActivity() {
                     if (planetResponse != null) {
                         planetResponse.result?.let { PlanetDetailGrid(it) }
                     }
-
-                    //Text(text = "Loading...")
                 }
 
             }
@@ -133,13 +140,17 @@ class PlanetDetailActivity : ComponentActivity() {
                     defaultElevation = 10.dp
                 )
             ) {
-                Text(text = "Description :",
+                Text(
+                    text = stringResource(R.string.description),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp)
-                Text(text = plantResult.description,
+                    fontSize = 18.sp
+                )
+                Text(
+                    text = plantResult.description,
                     fontWeight = FontWeight.Bold,
                     fontSize = 22.sp,
-                    color = Color.Black)
+                    color = Color.Black
+                )
             }
 
             Column {
@@ -152,7 +163,7 @@ class PlanetDetailActivity : ComponentActivity() {
                     ) {
                         PropertyItem(
                             value = plantProperties.rotation_period,
-                            name = "Rotation Period"
+                            name = stringResource(R.string.rotation_period)
                         )
                     }
                     Row(
@@ -162,7 +173,7 @@ class PlanetDetailActivity : ComponentActivity() {
                     ) {
                         PropertyItem(
                             value = plantProperties.orbital_period,
-                            name = "Orbital Period"
+                            name = stringResource(R.string.orbital_period)
                         )
                     }
                 }
@@ -175,32 +186,14 @@ class PlanetDetailActivity : ComponentActivity() {
                             .weight(1f)
                             .padding(10.dp)
                     ) {
-                        PropertyItem(value = plantProperties.diameter, name = "Diameter")
+                        PropertyItem(value = plantProperties.diameter, name = stringResource(R.string.diameter))
                     }
                     Row(
                         modifier = Modifier
                             .weight(1f)
                             .padding(10.dp)
                     ) {
-                        PropertyItem(value = plantProperties.climate, name = "Climate")
-                    }
-                }
-            }
-            Column {
-                Row {
-                    Row(
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(10.dp)
-                    ) {
-                        PropertyItem(value = plantProperties.gravity, name = "Gravity")
-                    }
-                    Row(
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(10.dp)
-                    ) {
-                        PropertyItem(value = plantProperties.terrain, name = "Terrain")
+                        PropertyItem(value = plantProperties.climate, name = stringResource(R.string.climate))
                     }
                 }
             }
@@ -211,14 +204,32 @@ class PlanetDetailActivity : ComponentActivity() {
                             .weight(1f)
                             .padding(10.dp)
                     ) {
-                        PropertyItem(value = plantProperties.surface_water, name = "Surface water")
+                        PropertyItem(value = plantProperties.gravity, name = stringResource(R.string.gravity))
                     }
                     Row(
                         modifier = Modifier
                             .weight(1f)
                             .padding(10.dp)
                     ) {
-                        PropertyItem(value = plantProperties.population, name = "population")
+                        PropertyItem(value = plantProperties.terrain, name = stringResource(R.string.terrain))
+                    }
+                }
+            }
+            Column {
+                Row {
+                    Row(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(10.dp)
+                    ) {
+                        PropertyItem(value = plantProperties.surface_water, name = stringResource(R.string.surface_water))
+                    }
+                    Row(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(10.dp)
+                    ) {
+                        PropertyItem(value = plantProperties.population, name = stringResource(R.string.population))
                     }
                 }
             }
