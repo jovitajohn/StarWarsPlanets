@@ -8,11 +8,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -36,13 +39,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.compose.rememberNavController
 import com.jovita.startwarplanets.R
 import com.jovita.startwarplanets.data.Planet
 import com.jovita.startwarplanets.data.PlanetProperties
 import com.jovita.startwarplanets.data.PlanetResult
 import com.jovita.startwarplanets.data.RootPlanetItem
 import com.jovita.startwarplanets.planetListing.PlanetListViewModel
-import com.jovita.startwarplanets.ui.theme.StartwarPlanetsTheme
+import com.jovita.startwarplanets.ui.theme.StarwarPlanetsTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -65,7 +69,7 @@ class PlanetDetailActivity : ComponentActivity() {
 
     private fun fetchPlanetDetails(): Planet {
         lifecycleScope.launch(Dispatchers.Main) {
-            val planetDetails = PlanetListViewModel().getPlanetDetails()
+            val planetDetails = PlanetListViewModel().getPlanetDetails(planetShort.uid)
             planet = planetDetails!!
         }
         return planet
@@ -77,9 +81,10 @@ class PlanetDetailActivity : ComponentActivity() {
     @Composable
     fun UiComponents() {
 
-        StartwarPlanetsTheme {
+        StarwarPlanetsTheme {
             val scope = rememberCoroutineScope()
             val snackbarHostState = remember { SnackbarHostState() }
+            val navController = rememberNavController()
             Scaffold(
                 snackbarHost = {
                     SnackbarHost(
@@ -98,6 +103,16 @@ class PlanetDetailActivity : ComponentActivity() {
                         title = {
                             Text(stringResource(R.string.top_bar_planet, planetShort.name))
                         },
+                        navigationIcon = {
+                            IconButton(onClick = {
+                                onBackPressedDispatcher.onBackPressed()
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Filled.ArrowBack,
+                                    contentDescription = "Back"
+                                )
+                            }
+                        }
                     )
                 },
             ) { innerPadding ->

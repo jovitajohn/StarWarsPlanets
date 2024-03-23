@@ -33,9 +33,9 @@ class PlanetListViewModel : ViewModel() {
         }
     }
 
-    suspend fun getPlanetDetails() : Planet? {
+    suspend fun getPlanetDetails(planetId : String) : Planet? {
         return try{
-            val response = apiService.getPlanetDetails()
+            val response = apiService.getPlanetDetails(planetId)
             Log.i("api response",response.toString())
             if(response.isSuccessful){
                 response.body()

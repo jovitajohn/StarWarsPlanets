@@ -2,7 +2,6 @@ package com.jovita.startwarplanets.planetListing
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -49,7 +48,7 @@ import androidx.lifecycle.lifecycleScope
 import com.jovita.startwarplanets.R
 import com.jovita.startwarplanets.data.RootPlanetItem
 import com.jovita.startwarplanets.planetDetail.PlanetDetailActivity
-import com.jovita.startwarplanets.ui.theme.StartwarPlanetsTheme
+import com.jovita.startwarplanets.ui.theme.StarwarPlanetsTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -82,7 +81,7 @@ class MainActivity : ComponentActivity() {
         val scope = rememberCoroutineScope()
         val snackbarHostState = remember { SnackbarHostState() }
 
-        StartwarPlanetsTheme {
+        StarwarPlanetsTheme {
             Scaffold(
                 snackbarHost = {
                     SnackbarHost(hostState = snackbarHostState, modifier = Modifier.testTag(
@@ -124,7 +123,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun StartWars(modifier: Modifier = Modifier, scope: CoroutineScope,snackbarHostState : SnackbarHostState) {
 
-        StartwarPlanetsTheme {
+        StarwarPlanetsTheme {
 
             var context = LocalContext.current
             val planetList: List<RootPlanetItem>? = fetchPlanets()
