@@ -1,5 +1,6 @@
 package com.jovita.startwarplanets.planetListing
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -26,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,16 +48,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
 import com.jovita.startwarplanets.R
+import com.jovita.startwarplanets.data.NetworkState
 import com.jovita.startwarplanets.data.RootPlanetItem
 import com.jovita.startwarplanets.planetDetail.PlanetDetailActivity
 import com.jovita.startwarplanets.ui.theme.StarwarPlanetsTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlin.properties.Delegates
 
 class MainActivity : ComponentActivity() {
 
     var planets by mutableStateOf<List<RootPlanetItem>>(emptyList())
+    var networkState :Boolean = true
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,10 +70,18 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun fetchPlanets(): List<RootPlanetItem> {
-        lifecycleScope.launch(Dispatchers.Main) {
-            val planetsList = PlanetListViewModel().getPlanetsData()
-            planets = planetsList!!
+    private fun fetchPlanets(context: Context): List<RootPlanetItem> {
+
+
+        if (NetworkState().isNetworkAvailable(context)) {
+            lifecycleScope.launch(Dispatchers.Main) {
+                val planetsList = PlanetListViewModel().getPlanetsData()
+                networkState = true
+                planets = planetsList!!
+            }
+        }else{
+            networkState = false
+            planets = emptyList()
         }
         return planets
     }
@@ -84,9 +97,11 @@ class MainActivity : ComponentActivity() {
         StarwarPlanetsTheme {
             Scaffold(
                 snackbarHost = {
-                    SnackbarHost(hostState = snackbarHostState, modifier = Modifier.testTag(
-                        stringResource(R.string.snackbar)
-                    ))
+                    SnackbarHost(
+                        hostState = snackbarHostState, modifier = Modifier.testTag(
+                            stringResource(R.string.snackbar)
+                        )
+                    )
                 },
                 topBar = {
                     TopAppBar(
@@ -121,19 +136,24 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun StartWars(modifier: Modifier = Modifier, scope: CoroutineScope,snackbarHostState : SnackbarHostState) {
+    fun StartWars(
+        modifier: Modifier = Modifier,
+        scope: CoroutineScope,
+        snackbarHostState: SnackbarHostState
+    ) {
 
         StarwarPlanetsTheme {
 
             var context = LocalContext.current
-            val planetList: List<RootPlanetItem>? = fetchPlanets()
-
 
             Column(
                 Modifier
                     .absolutePadding(5.dp, 15.dp, 5.dp, 5.dp)
-                    .fillMaxHeight()
+                    .fillMaxSize()
             ) {
+
+                val planetList: List<RootPlanetItem>? = fetchPlanets(context)
+
                 if (!planetList.isNullOrEmpty()) {
                     for (item in planetList) {
                         planetItem(data = item) {
@@ -142,7 +162,8 @@ class MainActivity : ComponentActivity() {
                                     getString(
                                         R.string.launching_details_for,
                                         item.name
-                                    ))
+                                    )
+                                )
                             }
                             val intent = Intent(context, PlanetDetailActivity::class.java)
                             intent.putExtra(getString(R.string.get_extra_planet), item)
@@ -150,9 +171,17 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 } else {
-                    planetItem(null) {
-                        scope.launch {
-                            snackbarHostState.showSnackbar(getString(R.string.try_again_later))
+                    if(networkState){
+                        planetItem(null) {
+                            scope.launch {
+                                snackbarHostState.showSnackbar(getString(R.string.try_again_later))
+                            }
+                        }
+                    }else{
+                        LaunchedEffect(key1 = 2000) {
+                            scope.launch {
+                                snackbarHostState.showSnackbar(getString(R.string.network_not_available))
+                            }
                         }
                     }
                 }

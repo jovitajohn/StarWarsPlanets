@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Startwar Planets</string>
     <string name="planetitem">planetItem</string>
-    <string name="try_again_later">Try again later!</string>
+    <string name="try_again_later">No data! Try again later!</string>
     <string name="snackbar">Snackbar</string>
     <string name="launching_details_for">Launching details for %1$s</string>
     <string name="top_bar">top bar</string>
@@ -21,4 +21,6 @@
     <string name="surface_water">Surface water</string>
     <string name="population">population</string>
     <string name="star_wars_planets">Star Wars Planets</string>
+    <string name="network_error">Check network and try again later!!</string>
+    <string name="network_not_available">Network not available. Please try again later!!</string>
 </resources>

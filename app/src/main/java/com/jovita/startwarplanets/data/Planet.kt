@@ -1,7 +1,6 @@
 package com.jovita.startwarplanets.data
 
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
 
 data class Planet(
     val message : String = " ",
