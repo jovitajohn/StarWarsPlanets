@@ -10,7 +10,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.absolutePadding
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -55,7 +54,6 @@ import com.jovita.startwarplanets.ui.theme.StarwarPlanetsTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.properties.Delegates
 
 class MainActivity : ComponentActivity() {
 
@@ -144,7 +142,7 @@ class MainActivity : ComponentActivity() {
 
         StarwarPlanetsTheme {
 
-            var context = LocalContext.current
+            val context = LocalContext.current
 
             Column(
                 Modifier
@@ -152,7 +150,7 @@ class MainActivity : ComponentActivity() {
                     .fillMaxSize()
             ) {
 
-                val planetList: List<RootPlanetItem>? = fetchPlanets(context)
+                val planetList: List<RootPlanetItem> = fetchPlanets(context)
 
                 if (!planetList.isNullOrEmpty()) {
                     for (item in planetList) {
