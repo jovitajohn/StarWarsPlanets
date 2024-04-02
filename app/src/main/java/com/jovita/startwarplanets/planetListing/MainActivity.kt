@@ -57,10 +57,10 @@ import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
-    var planets by mutableStateOf<List<RootPlanetItem>>(emptyList())
-    var networkState :Boolean = true
+    private var planets by mutableStateOf<List<RootPlanetItem>>(emptyList())
+    private var networkState :Boolean = true
 
-    @OptIn(ExperimentalMaterial3Api::class)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -123,8 +123,6 @@ class MainActivity : ComponentActivity() {
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
                     StartWars(
-                        Modifier
-                            .fillMaxSize(),
                         scope,
                         snackbarHostState
                     )
@@ -135,7 +133,6 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun StartWars(
-        modifier: Modifier = Modifier,
         scope: CoroutineScope,
         snackbarHostState: SnackbarHostState
     ) {
@@ -152,9 +149,9 @@ class MainActivity : ComponentActivity() {
 
                 val planetList: List<RootPlanetItem> = fetchPlanets(context)
 
-                if (!planetList.isNullOrEmpty()) {
+                if (planetList.isNotEmpty()) {
                     for (item in planetList) {
-                        planetItem(data = item) {
+                        PlanetItem(data = item) {
                             scope.launch {
                                 snackbarHostState.showSnackbar(
                                     getString(
@@ -170,7 +167,7 @@ class MainActivity : ComponentActivity() {
                     }
                 } else {
                     if(networkState){
-                        planetItem(null) {
+                        PlanetItem(null) {
                             scope.launch {
                                 snackbarHostState.showSnackbar(getString(R.string.try_again_later))
                             }
@@ -189,7 +186,7 @@ class MainActivity : ComponentActivity() {
 
 
     @Composable
-    fun planetItem(data: RootPlanetItem?, onClick: () -> Unit) {
+    fun PlanetItem(data: RootPlanetItem?, onClick: () -> Unit) {
 
         ElevatedCard(
             modifier = Modifier
@@ -219,14 +216,12 @@ class MainActivity : ComponentActivity() {
                         color = Color.Black
                     )
                 } else {
-                    data?.name?.let {
-                        Text(
-                            text = it,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 22.sp,
-                            color = Color.Black
-                        )
-                    }
+                    Text(
+                        text = data.name,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 22.sp,
+                        color = Color.Black
+                    )
                 }
             }
         }

@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,9 +33,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -126,7 +130,12 @@ class PlanetDetailActivity : ComponentActivity() {
             ) { innerPadding ->
                 Column(
                     modifier = Modifier
-                        .padding(innerPadding),
+                        .padding(innerPadding)
+                        .fillMaxSize()
+                        .paint(
+                            painterResource(id = R.drawable.background_galaxy),
+                            contentScale = ContentScale.FillBounds
+                        ),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
                     LaunchedEffect(500) {
@@ -144,7 +153,7 @@ class PlanetDetailActivity : ComponentActivity() {
                             if (networkState) getString(R.string.try_again_later) else getString(R.string.network_not_available)
 
                         LaunchedEffect(Unit) {
-                                snackbarHostState.showSnackbar(msg)
+                            snackbarHostState.showSnackbar(msg)
                         }
                     }
                 }
@@ -172,17 +181,21 @@ fun PlanetDetailGrid(plantResult: PlanetResult) {
                 defaultElevation = 10.dp
             )
         ) {
-            Text(
-                text = stringResource(R.string.description),
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp
-            )
-            Text(
-                text = plantResult.description,
-                fontWeight = FontWeight.Bold,
-                fontSize = 22.sp,
-                color = Color.Black
-            )
+            Column(modifier = Modifier.padding(10.dp)) {
+
+                Text(
+                    text = stringResource(R.string.description),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
+                )
+                Text(
+                    text = plantResult.description,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 22.sp,
+                    color = Color.Black
+                )
+
+            }
         }
 
         Column {
@@ -253,8 +266,8 @@ fun PlanetDetailGrid(plantResult: PlanetResult) {
                         .padding(10.dp)
                 ) {
                     PropertyItem(
-                        value = plantProperties.terrain,
-                        name = stringResource(R.string.terrain)
+                        value = plantProperties.population,
+                        name = stringResource(R.string.population)
                     )
                 }
             }
@@ -277,8 +290,8 @@ fun PlanetDetailGrid(plantResult: PlanetResult) {
                         .padding(10.dp)
                 ) {
                     PropertyItem(
-                        value = plantProperties.population,
-                        name = stringResource(R.string.population)
+                        value = plantProperties.terrain,
+                        name = stringResource(R.string.terrain)
                     )
                 }
             }
@@ -297,7 +310,10 @@ fun PropertyItem(value: String, name: String) {
             defaultElevation = 10.dp
         )
     ) {
-        Column {
+        Column(
+            modifier = Modifier
+                .padding(10.dp)
+        ) {
             Text(
                 text = value,
                 fontWeight = FontWeight.Bold,
